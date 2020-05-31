@@ -77,10 +77,10 @@ class ReceiptController extends Controller
         $original_json->receipt_id = $receipt_id;
         $original_json->save();
 
-        //$receipt = \App\receipt::find($receipt_id)
-        //    ->update([
-        //        'original_JSON_id' => $original_json->count()
-        //    ]);
+        $receipt = \App\receipt::find($receipt_id)
+            ->update([
+                'original_JSON_id' => $original_json->count()
+            ]);
     }
 
     /**
