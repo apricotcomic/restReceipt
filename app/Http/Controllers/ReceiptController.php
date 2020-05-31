@@ -52,37 +52,35 @@ class ReceiptController extends Controller
         Log::debug('message', ['msg' => 'receipt insert', 'id' => $receipt_id]);
 
         //insert receipt_detail
-        $receipt_detail = new \App\receipt_detail();
-        $array_receipt = array();
-        $array_receipt = json_decode($request,true);
-        $receipt_detail->receipt_id = $receipt_id;
-        Log::debug('message', ['msg' => 'receipt insert', 'no' => $array_receipt]);
-        //foreach ($array_receipt as $key1 => $value1) {
-        //    foreach ($value1 as $key2 => $value2) {
-        //        $receipt_detail->line_no = $value2['no'];
-        //        $receipt_detail->item_name = $value2['item_name'];
-        //        $receipt_detail->unit_price = $value2['unit_price'];
-        //        $receipt_detail->quantity = $value2['quantity'];
-        //        $receipt_detail->tax = $value2['tax'];
-        //        $receipt_detail->fee = $value2['fee'];
-        //        $receipt_detail->item_1 = $value2['item_1'];
-        //        $receipt_detail->item_2 = $value2['item_2'];
-        //        $receipt_detail->item_3 = $value2['item_3'];
-        //        $receipt_detail->item_4 = $value2['item_4'];
-        //        $receipt_detail->item_5 = $value2['item_5'];
-        //        $receipt_detail->save();
-        //        Log::debug('message', ['msg' => 'receipt insert', 'no' => array_search('no',$value2)]);
-        //    }
-        //}
+        //$receipt_detail = new \App\receipt_detail();
+        $content = $request->getContent();
+        $json = json_decode($content, true);
+        foreach ($json["receipt_details"] as $key => $value) {
+            \App\receipt_detail::create([
+                'receipt_id' => $receipt_id,
+                'line_no' => $value["no"],
+                'item_name' => $value["item_name"],
+                'unit_price' => $value["unit_price"],
+                'quantity' => $value["quantity"],
+                'tax' => $value["tax"],
+                'fee' => $value["fee"],
+                'item_1' => $value["item_1"],
+                'item_2' => $value["item_2"],
+                'item_3' => $value["item_3"],
+                'item_4' => $value["item_4"],
+                'item_5' => $value["item_5"]
+            ]);
+        }
+
         //insert original_JSON
-        Log::debug('message', ['msg' => 'original_JSON insert', 'id' => $receipt_id]);
-        $original_json = new \App\original_json();
-        $original_json->JSON_data = $request->input('receipt_details');
-        Log::debug('message', ['msg' => 'json_decode', 'error' => json_last_error_msg()]);
-        $original_json->receipt_id = $receipt_id;
-        $original_json->save();
-        $receipt = \App\receipt::find($receipt_id)
-            ->update(['original_JSON_id' => $original_json->count()]);
+        //Log::debug('message', ['msg' => 'original_JSON insert', 'id' => $receipt_id]);
+        //$original_json = new \App\original_json();
+        //$original_json->JSON_data = json_decode($request, true);
+        //Log::debug('message', ['msg' => 'json_decode', 'json data' => $request->input('receipt_details.no')]);
+        //$original_json->receipt_id = $receipt_id;
+        //$original_json->save();
+        //$receipt = \App\receipt::find($receipt_id)
+        //    ->update(['original_JSON_id' => $original_json->count()]);
 
     }
 
