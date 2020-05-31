@@ -15,7 +15,7 @@ class CreateOriginalJsonTable extends Migration
     {
         Schema::create('original_json', function (Blueprint $table) {
             $table->id();
-            $table->json('JSON_data');
+            $table->text('JSON_data');
             $table->bigInteger('receipt_id');
             $table->timestamps();
         });

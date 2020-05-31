@@ -49,10 +49,8 @@ class ReceiptController extends Controller
         $receipt->original_JSON_id = 0;
         $receipt->save();
         $receipt_id = $receipt->count();
-        Log::debug('message', ['msg' => 'receipt insert', 'id' => $receipt_id]);
 
         //insert receipt_detail
-        //$receipt_detail = new \App\receipt_detail();
         $content = $request->getContent();
         $json = json_decode($content, true);
         foreach ($json["receipt_details"] as $key => $value) {
@@ -73,15 +71,16 @@ class ReceiptController extends Controller
         }
 
         //insert original_JSON
-        //Log::debug('message', ['msg' => 'original_JSON insert', 'id' => $receipt_id]);
-        //$original_json = new \App\original_json();
-        //$original_json->JSON_data = json_decode($request, true);
-        //Log::debug('message', ['msg' => 'json_decode', 'json data' => $request->input('receipt_details.no')]);
-        //$original_json->receipt_id = $receipt_id;
-        //$original_json->save();
-        //$receipt = \App\receipt::find($receipt_id)
-        //    ->update(['original_JSON_id' => $original_json->count()]);
+        Log::debug('message', ['msg' => 'original_JSON insert', 'id' => $receipt_id]);
+        $original_json = new \App\original_json();
+        $original_json->JSON_data = $content;
+        $original_json->receipt_id = $receipt_id;
+        $original_json->save();
 
+        //$receipt = \App\receipt::find($receipt_id)
+        //    ->update([
+        //        'original_JSON_id' => $original_json->count()
+        //    ]);
     }
 
     /**
