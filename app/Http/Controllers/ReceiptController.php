@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use app\original_json;
 use app\receipt;
 use app\receipt_detail;
-use app\original_json;
-use Illuminate\Support\Facades\Log;
 
 class ReceiptController extends Controller
 {
@@ -38,7 +39,37 @@ class ReceiptController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug('message', ['msg' => 'store start']);
+        //JSON decode
+        $content = $request->getContent();
+        $json = json_decode($content, true);
+        //validation
+        //array count check
+        $array_count = $json->input('number_of_items');
+        $rules = [
+            'remarks' => 'same:$array_count'
+        ];
+        $validator = Validator::make(['remarks' => $json["receipt_details"]],$rules);
+        if ($validator->fails()) {
+            return response()->error($validator->errors()->all());
+        }
+        //company_id check
+        $rules = [
+            'company_id' => 'exists:company,id'
+        ];
+        $validator = Validator::make(['company' => $json],$rules);
+        if ($validator->fails()) {
+            return response()->error($validator->errors()->all());
+        }
+        //
+        foreach ($json["receipt_details"] as $key => $value) {
+            $rules = [
+                'no' => ['numeric','lt:$array_count']
+            ];
+            $validator = Validator::make($value,$rules);
+            if ($validator->fails()) {
+                return response()->error($validator->errors()->all());
+            }
+        }
         //insert receipt
         $receipt = new \App\receipt();
         $receipt->company_id = $request->input('company_id');
@@ -51,8 +82,6 @@ class ReceiptController extends Controller
         $receipt_id = $receipt->count();
 
         //insert receipt_detail
-        $content = $request->getContent();
-        $json = json_decode($content, true);
         foreach ($json["receipt_details"] as $key => $value) {
             \App\receipt_detail::create([
                 'receipt_id' => $receipt_id,
