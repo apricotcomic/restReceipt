@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use app\original_json;
-use app\receipt;
-use app\receipt_detail;
+use App\original_json;
+use App\receipt;
+use App\receipt_detail;
+use App\Http\Requests\ReceiptRequest;
 
 class ReceiptController extends Controller
 {
@@ -37,39 +38,19 @@ class ReceiptController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ReceiptRequest $request)
     {
         //JSON decode
         $content = $request->getContent();
         $json = json_decode($content, true);
         //validation
         //array count check
-        $array_count = $json->input('number_of_items');
-        $rules = [
-            'remarks' => 'same:$array_count'
-        ];
-        $validator = Validator::make(['remarks' => $json["receipt_details"]],$rules);
-        if ($validator->fails()) {
-            return response()->error($validator->errors()->all());
-        }
+        $array_count = $request->input('number_of_items');
+
         //company_id check
-        $rules = [
-            'company_id' => 'exists:company,id'
-        ];
-        $validator = Validator::make(['company' => $json],$rules);
-        if ($validator->fails()) {
-            return response()->error($validator->errors()->all());
-        }
+
         //
-        foreach ($json["receipt_details"] as $key => $value) {
-            $rules = [
-                'no' => ['numeric','lt:$array_count']
-            ];
-            $validator = Validator::make($value,$rules);
-            if ($validator->fails()) {
-                return response()->error($validator->errors()->all());
-            }
-        }
+
         //insert receipt
         $receipt = new \App\receipt();
         $receipt->company_id = $request->input('company_id');
@@ -110,6 +91,10 @@ class ReceiptController extends Controller
             ->update([
                 'original_JSON_id' => $original_json->count()
             ]);
+
+        return response()->json([
+            'status' => 200
+        ],200);
     }
 
     /**

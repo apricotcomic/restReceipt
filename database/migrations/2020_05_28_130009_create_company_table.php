@@ -16,12 +16,12 @@ class CreateCompanyTable extends Migration
         Schema::create('company', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
-            $table->string('tel');
-            $table->string('fax');
-            $table->string('email');
-            $table->string('stamp_image');
-            $table->string('receipt_image');
+            $table->string('address')->nullable($value = true);
+            $table->string('tel')->nullable($value = true);
+            $table->string('fax')->nullable($value = true);
+            $table->string('email')->nullable($value = true);
+            $table->string('stamp_image')->nullable($value = true);
+            $table->string('receipt_image')->nullable($value = true);
             $table->timestamps();
         });
     }
