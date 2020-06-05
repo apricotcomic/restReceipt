@@ -27,10 +27,16 @@ class ReceiptRequest extends FormRequest
     {
         return [
             //
-            'company_id' => 'exists:company,id',
-            'remarks' => 'same:$array_count',
-            'no' => ['numeric','lt:$array_count']
-        ];
+            'company_id' => 'exists:company,id',        //comapnyテーブルのidに存在すること
+            'total_tax' => 'numeric',
+            'total_fee' => 'numeric',
+            'number_of_items' => 'numeric',
+            'receipt_details.*.no' => ['numeric', 'distinct'],   //数字、かつ重複チェック
+            'receipt_details.*.unit_price' => 'numeric',
+            'receipt_details.*.quantity' => 'numeric',
+            'receipt_details.*.tax' => 'numeric',
+            'receipt_details.*.fee' => 'numeric'
+            ];
     }
 
     protected function failedValidation(Validator $validator)
