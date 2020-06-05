@@ -30,7 +30,6 @@ class ReceiptRequest extends FormRequest
             'company_id' => 'exists:company,id',        //comapnyテーブルのidに存在すること
             'total_tax' => 'numeric',
             'total_fee' => 'numeric',
-            'number_of_items' => 'numeric',
             'receipt_details.*.no' => ['numeric', 'distinct'],   //数字、かつ重複チェック
             'receipt_details.*.unit_price' => 'numeric',
             'receipt_details.*.quantity' => 'numeric',
@@ -46,15 +45,5 @@ class ReceiptRequest extends FormRequest
             'errors' => $validator->errors(),
         ],400);
         throw new HttpResponseException($res);
-    }
-
-    public function withValidator(Validator $validator) {
-        $validator->after(function ($validator) {
-            $content = $this->getContent();
-            $json = json_decode($content, true);
-            foreach ($this["receipt_details"] as $key => $value) {
-
-            }
-        });
     }
 }
