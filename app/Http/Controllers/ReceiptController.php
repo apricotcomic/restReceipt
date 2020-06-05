@@ -43,13 +43,6 @@ class ReceiptController extends Controller
         //JSON decode
         $content = $request->getContent();
         $json = json_decode($content, true);
-        //validation
-        //array count check
-        $array_count = $request->input('number_of_items');
-
-        //company_id check
-
-        //
 
         //insert receipt
         $receipt = new \App\receipt();
