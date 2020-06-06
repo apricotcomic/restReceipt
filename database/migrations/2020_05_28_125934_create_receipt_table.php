@@ -15,7 +15,7 @@ class CreateReceiptTable extends Migration
     {
         Schema::create('receipt', function (Blueprint $table) {
             $table->id();
-            $table->string('company_id');
+            $table->bigInteger('company_id');
             $table->string('register_id');
             $table->string('original_receipt_id');
             $table->bigInteger('total_tax');

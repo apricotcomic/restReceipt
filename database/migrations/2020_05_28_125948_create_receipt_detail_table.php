@@ -15,7 +15,7 @@ class CreateReceiptDetailTable extends Migration
     {
         Schema::create('receipt_detail', function (Blueprint $table) {
             $table->id();
-            $table->string('receipt_id');
+            $table->bigInteger('receipt_id');
             $table->integer('line_no');
             $table->string('item_name');
             $table->integer('unit_price');

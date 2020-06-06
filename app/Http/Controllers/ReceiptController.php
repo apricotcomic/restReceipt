@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
+use App\company;
 use App\original_json;
 use App\receipt;
 use App\receipt_detail;
@@ -45,7 +45,7 @@ class ReceiptController extends Controller
         $json = json_decode($content, true);
 
         //insert receipt
-        $receipt = new \App\receipt();
+        $receipt = new receipt();
         $receipt->company_id = $request->input('company_id');
         $receipt->register_id = $request->input('register_id');
         $receipt->original_receipt_id = $request->input('original_receipt_id');
@@ -57,7 +57,7 @@ class ReceiptController extends Controller
 
         //insert receipt_detail
         foreach ($json["receipt_details"] as $key => $value) {
-            \App\receipt_detail::create([
+            receipt_detail::create([
                 'receipt_id' => $receipt_id,
                 'line_no' => $value["no"],
                 'item_name' => $value["item_name"],
@@ -74,13 +74,12 @@ class ReceiptController extends Controller
         }
 
         //insert original_JSON
-        Log::debug('message', ['msg' => 'original_JSON insert', 'id' => $receipt_id]);
-        $original_json = new \App\original_json();
+        $original_json = new original_json();
         $original_json->JSON_data = $content;
         $original_json->receipt_id = $receipt_id;
         $original_json->save();
 
-        $receipt = \App\receipt::find($receipt_id)
+        $receipt = receipt::find($receipt_id)
             ->update([
                 'original_JSON_id' => $original_json->count()
             ]);
@@ -99,10 +98,41 @@ class ReceiptController extends Controller
     public function show($id)
     {
         //
+        $receipt = receipt::find($id);
+
+        foreach ($receipt as $receipt_value) {
+        $company = company::find($receipt->company_id);
+        $receipt_json = '"receipt_id" : "' . (string)$receipt->id . '",' .
+            '"company_name" : "' . $company->name . '",' .
+            '"total_tax" : "' . (string)$receipt->total_tax . '",' .
+            '"total_fee" : "' . (string)$receipt->total_fee . '",' .
+            '"receipt_details" : [';
+        }
+
+        $receipt_detail = receipt_detail::whereReceipt_id($id)->get();
+        $receipt_details_json = null;
+        foreach ($receipt_detail as $key => $value) {
+            $receipt_detail_json =
+                '{"no" : "' . (string)$value->id . '",' .
+                '"item_name" : "' . $value->item_name . '",' .
+                '"unit_price" : "' . (string)$value->unit_price . '",' .
+                '"quantity" : "' . (string)$value->quantity . '",' .
+                '"tax" : "' . (string)$value->tax . '",' .
+                '"fee" : "' . (string)$value->fee . '",' .
+                '"item_1" : "' . $value->item_1 . '",' .
+                '"item_2" : "' . $value->item_2 . '",' .
+                '"item_3" : "' . $value->item_3 . '",' .
+                '"item_4" : "' . $value->item_4 . '",' .
+                '"item_5" : "' . $value->item_5 . '"}';
+            $receipt_details_json .= $receipt_detail_json;
+        }
+        $receipt_details_json .= ']';
+        $return_json = $receipt_json . $receipt_details_json;
+        return response()->json($return_json);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resource.0
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
