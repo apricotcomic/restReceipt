@@ -102,12 +102,15 @@ class ReceiptController extends Controller
         $receipt = receipt::find($id);
         $company = company::find($receipt->company_id);
         $receipt_json = [
+            'status' => null,
             'receipt_id' => $receipt->id,
             'company_name' => $company->name,
             'total_tax' => $receipt->total_tax,
-            'total_fee' => $receipt->total_fee
+            'total_fee' => $receipt->total_fee,
+            'detail_count' => null
         ];
 
+        $detail_count = 0;
         $receipt_detail = receipt_detail::whereReceipt_id($id)->get();
         $receipt_details_json = null;
         foreach ($receipt_detail as $key => $value) {
@@ -124,7 +127,10 @@ class ReceiptController extends Controller
                 'item_4' => $value->item_4,
                 'item_5' => $value->item_5
             ];
+            $detail_count++;
         }
+        $receipt_json['status'] = 200;
+        $receipt_json['detail_count'] = $detail_count;
         return response()->json($receipt_json);
     }
 
