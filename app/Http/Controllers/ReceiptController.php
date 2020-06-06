@@ -85,7 +85,8 @@ class ReceiptController extends Controller
             ]);
 
         return response()->json([
-            'status' => 200
+            'status' => 200,
+            'receipt_id' => $receipt_id
         ],200);
     }
 
@@ -99,36 +100,32 @@ class ReceiptController extends Controller
     {
         //
         $receipt = receipt::find($id);
-
-        foreach ($receipt as $receipt_value) {
         $company = company::find($receipt->company_id);
-        $receipt_json = '"receipt_id" : "' . (string)$receipt->id . '",' .
-            '"company_name" : "' . $company->name . '",' .
-            '"total_tax" : "' . (string)$receipt->total_tax . '",' .
-            '"total_fee" : "' . (string)$receipt->total_fee . '",' .
-            '"receipt_details" : [';
-        }
+        $receipt_json = [
+            'receipt_id' => $receipt->id,
+            'company_name' => $company->name,
+            'total_tax' => $receipt->total_tax,
+            'total_fee' => $receipt->total_fee
+        ];
 
         $receipt_detail = receipt_detail::whereReceipt_id($id)->get();
         $receipt_details_json = null;
         foreach ($receipt_detail as $key => $value) {
-            $receipt_detail_json =
-                '{"no" : "' . (string)$value->id . '",' .
-                '"item_name" : "' . $value->item_name . '",' .
-                '"unit_price" : "' . (string)$value->unit_price . '",' .
-                '"quantity" : "' . (string)$value->quantity . '",' .
-                '"tax" : "' . (string)$value->tax . '",' .
-                '"fee" : "' . (string)$value->fee . '",' .
-                '"item_1" : "' . $value->item_1 . '",' .
-                '"item_2" : "' . $value->item_2 . '",' .
-                '"item_3" : "' . $value->item_3 . '",' .
-                '"item_4" : "' . $value->item_4 . '",' .
-                '"item_5" : "' . $value->item_5 . '"}';
-            $receipt_details_json .= $receipt_detail_json;
+            $receipt_json['receipt_detail'][$key] = [
+                'no' => $value->id,
+                'item_name' => $value->item_name,
+                'unit_price' => $value->unit_price,
+                'quantity' => $value->quantity,
+                'tax' => $value->tax,
+                'fee' => $value->fee,
+                'item_1' => $value->item_1,
+                'item_2' => $value->item_2,
+                'item_3' => $value->item_3,
+                'item_4' => $value->item_4,
+                'item_5' => $value->item_5
+            ];
         }
-        $receipt_details_json .= ']';
-        $return_json = $receipt_json . $receipt_details_json;
-        return response()->json($return_json);
+        return response()->json($receipt_json);
     }
 
     /**
