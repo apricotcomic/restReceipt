@@ -85,7 +85,7 @@ class ReceiptController extends Controller
             ]);
 
         return response()->json([
-            'status' => 200,
+            'status' => 0,
             'receipt_id' => $receipt_id
         ],200);
     }
@@ -129,7 +129,7 @@ class ReceiptController extends Controller
             ];
             $detail_count++;
         }
-        $receipt_json['status'] = 200;
+        $receipt_json['status'] = 0;
         $receipt_json['detail_count'] = $detail_count;
         return response()->json($receipt_json);
     }
