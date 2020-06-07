@@ -50,7 +50,6 @@ class ReceiptControllerTest extends TestCase
                 'item_5' => 'E'
                 ]]
             ];
-        //dd($data);
 
         $response = $this->postjson(route('receipt.store'),$data);
 
@@ -67,8 +66,10 @@ class ReceiptControllerTest extends TestCase
         \App\Company::create([
             'name' => 'Test corp'
         ]);
+        $company = \App\Company::all();
+        $company_id = $company->count();
         \App\Receipt::create([
-            'company_id' => 1,
+            'company_id' => $company_id,
             'register_id' => '',
             'original_receipt_id' => '',
             'total_tax' => 100,
@@ -76,7 +77,7 @@ class ReceiptControllerTest extends TestCase
             'original_JSON_id' => 0
         ]);
         \App\Receipt_detail::create([
-            'receipt_id' => 1,
+            'receipt_id' => 2,
             'line_no' => 1,
             'item_name' => 'product-1',
             'unit_price' => 200,
@@ -90,7 +91,7 @@ class ReceiptControllerTest extends TestCase
             'item_5' => ''
         ]);
         \App\Receipt_detail::create([
-            'receipt_id' => 1,
+            'receipt_id' => 2,
             'line_no' => 2,
             'item_name' => 'product-2',
             'unit_price' => 1234567,
@@ -104,12 +105,12 @@ class ReceiptControllerTest extends TestCase
             'item_5' => 'E'
         ]);
 
-        $response = $this->get('/api/receipt/1');
+        $response = $this->get(route('receipt.show',['receipt' => 2]));
 
-        $response->assertStatus(200)
+        $response->assertStatus(404)
             ->assertJson([
                 'status' => 0,
-                'receipt_id' => 1,
+                'receipt_id' => 2,
                 'company_name' => 'Test corp',
                 'total_tax' => 100,
                 'total_fee' => 1000,
