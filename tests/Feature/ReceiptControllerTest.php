@@ -4,7 +4,10 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use App\company;
 
 class ReceiptControllerTest extends TestCase
 {
@@ -66,8 +69,11 @@ class ReceiptControllerTest extends TestCase
         \App\Company::create([
             'name' => 'Test corp'
         ]);
-        $company = \App\Company::all();
-        $company_id = $company->count();
+        $company = DB::table('company')
+                    ->select('id')
+                    ->orderBy('id','DESC')
+                    ->first();
+        $company_id = $company->id;
         \App\Receipt::create([
             'company_id' => $company_id,
             'register_id' => '',
@@ -76,8 +82,12 @@ class ReceiptControllerTest extends TestCase
             'total_fee' => 1000,
             'original_JSON_id' => 0
         ]);
+        $receipt = DB::table('receipt')
+                    ->orderByRaw('id','DESC')
+                    ->first();
+        $receipt_id = $receipt->id;
         \App\Receipt_detail::create([
-            'receipt_id' => 2,
+            'receipt_id' => $receipt_id,
             'line_no' => 1,
             'item_name' => 'product-1',
             'unit_price' => 200,
@@ -91,7 +101,7 @@ class ReceiptControllerTest extends TestCase
             'item_5' => ''
         ]);
         \App\Receipt_detail::create([
-            'receipt_id' => 2,
+            'receipt_id' => $receipt_id,
             'line_no' => 2,
             'item_name' => 'product-2',
             'unit_price' => 1234567,
@@ -105,17 +115,18 @@ class ReceiptControllerTest extends TestCase
             'item_5' => 'E'
         ]);
 
-        $response = $this->get(route('receipt.show',['receipt' => 2]));
+        $response = $this->get(route('receipt.show',['receipt' => $receipt_id]));
 
-        $response->assertStatus(404)
-            ->assertJson([
+        $response->assertStatus(200)
+            ->assertExactJson([
                 'status' => 0,
-                'receipt_id' => 2,
+                'receipt_id' => $receipt_id,
                 'company_name' => 'Test corp',
                 'total_tax' => 100,
                 'total_fee' => 1000,
-                'receipt_details' => [[
-                    'no' => 1,
+                'detail_count' => 2,
+                'receipt_details' =>[
+                    ['no' => 1,
                     'item_name' => 'product-1',
                     'unit_price' => 200,
                     'quantity' => 1,
@@ -125,8 +136,7 @@ class ReceiptControllerTest extends TestCase
                     'item_2' => '',
                     'item_3' => '',
                     'item_4' => '',
-                    'item_5' => ''
-                    ],
+                    'item_5' => ''],
                     ['no' => 2,
                     'item_name' => 'product-2',
                     'unit_price' => 1234567,
@@ -137,9 +147,14 @@ class ReceiptControllerTest extends TestCase
                     'item_2' => 'B',
                     'item_3' => 'C',
                     'item_4' => 'D',
-                    'item_5' => 'E'
-                    ]
+                    'item_5' => 'E']
                 ]
             ]);
+    }
+
+    public function tearDown():void
+    {
+        Artisan::call('migrate:refresh');
+        parent::tearDown();
     }
 }

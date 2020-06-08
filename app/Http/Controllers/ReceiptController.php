@@ -99,8 +99,8 @@ class ReceiptController extends Controller
     public function show($id)
     {
         //
-        $receipt = receipt::find($id);
-        $company = company::find($receipt->company_id);
+        $receipt = receipt::findOrFail($id);
+        $company = company::findOrFail($receipt->company_id);
         $receipt_json = [
             'status' => null,
             'receipt_id' => $receipt->id,
@@ -114,7 +114,7 @@ class ReceiptController extends Controller
         $receipt_detail = receipt_detail::whereReceipt_id($id)->get();
         $receipt_details_json = null;
         foreach ($receipt_detail as $key => $value) {
-            $receipt_json['receipt_detail'][$key] = [
+            $receipt_json['receipt_details'][$key] = [
                 'no' => $value->id,
                 'item_name' => $value->item_name,
                 'unit_price' => $value->unit_price,
