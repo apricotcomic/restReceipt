@@ -12,7 +12,7 @@ class receipt extends Model
     protected $fillable = [
         'id',
         'company_id',
-        'register_id',
+        'terminal_id',
         'original_receipt_id',
         'total_tax',
         'total_fee',

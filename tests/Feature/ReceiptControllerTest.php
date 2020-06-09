@@ -23,7 +23,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
-            'register_id' => '1-1-557',
+            'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
             'total_fee' => '1000',
@@ -76,7 +76,7 @@ class ReceiptControllerTest extends TestCase
         $company_id = $company->id;
         \App\Receipt::create([
             'company_id' => $company_id,
-            'register_id' => '',
+            'terminal_id' => '',
             'original_receipt_id' => '',
             'total_tax' => 100,
             'total_fee' => 1000,
@@ -114,7 +114,7 @@ class ReceiptControllerTest extends TestCase
             'item_4' => 'D',
             'item_5' => 'E'
         ]);
-
+        //　テスト
         $response = $this->get(route('receipt.show',['receipt' => $receipt_id]));
 
         $response->assertStatus(200)
@@ -149,6 +149,393 @@ class ReceiptControllerTest extends TestCase
                     'item_4' => 'D',
                     'item_5' => 'E']
                 ]
+            ]);
+    }
+
+    public function testexists_company_id()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '99999',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testnumeric_total_tax()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '10z',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testnumeric_total_fee()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => 'a000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testnumeric_no()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => 'k',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testdistinct_no()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '1',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testnumeric_unit_price()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200i',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testnumeric_quantity()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => 'p',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testnumeric_tax()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => 'qq',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testnumeric_fee()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => 'zzzzzzz',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
             ]);
     }
 

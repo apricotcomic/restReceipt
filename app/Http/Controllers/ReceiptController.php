@@ -47,7 +47,7 @@ class ReceiptController extends Controller
         //insert receipt
         $receipt = new receipt();
         $receipt->company_id = $request->input('company_id');
-        $receipt->register_id = $request->input('register_id');
+        $receipt->terminal_id = $request->input('terminal_id');
         $receipt->original_receipt_id = $request->input('original_receipt_id');
         $receipt->total_tax = $request->input('total_tax');
         $receipt->total_fee = $request->input('total_fee');
