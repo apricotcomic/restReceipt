@@ -84,10 +84,15 @@ class ReceiptController extends Controller
                 'original_JSON_id' => $original_json->count()
             ]);
 
+        Log::info('post receipt id:'.$receipt_id.
+                    ' company id:'.$request->input('company_id').
+                    ' terminal id:'.$request->input('terminal_id'));
+
         return response()->json([
             'status' => 0,
             'receipt_id' => $receipt_id
         ],200);
+
     }
 
     /**
@@ -131,7 +136,11 @@ class ReceiptController extends Controller
         }
         $receipt_json['status'] = 0;
         $receipt_json['detail_count'] = $detail_count;
+
+        Log::info('GET receipt_id:'.$receipt->id);
+
         return response()->json($receipt_json);
+
     }
 
     /**

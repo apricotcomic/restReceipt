@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['myaccess','myerror'],
             'ignore_exceptions' => false,
         ],
 
@@ -98,6 +98,18 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'myerror' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/myerror.log'),
+            'level' => 'error',
+        ],
+
+        'myaccess' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/myaccess.log'),
+            'level' => 'info',
         ],
     ],
 
