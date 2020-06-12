@@ -47,6 +47,7 @@ class ReceiptController extends Controller
         //insert receipt
         $receipt = new receipt();
         $receipt->company_id = $request->input('company_id');
+        $receipt->branch_id = $request->input('branch_id');
         $receipt->terminal_id = $request->input('terminal_id');
         $receipt->original_receipt_id = $request->input('original_receipt_id');
         $receipt->total_tax = $request->input('total_tax');
@@ -86,6 +87,7 @@ class ReceiptController extends Controller
 
         Log::info('post receipt id:'.$receipt_id.
                     ' company id:'.$request->input('company_id').
+                    ' branch id:'.$request->input('branch_id').
                     ' terminal id:'.$request->input('terminal_id'));
 
         return response()->json([

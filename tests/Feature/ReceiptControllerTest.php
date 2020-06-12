@@ -23,6 +23,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -76,7 +77,8 @@ class ReceiptControllerTest extends TestCase
         $company_id = $company->id;
         \App\Receipt::create([
             'company_id' => $company_id,
-            'terminal_id' => '',
+            'branch_id' => 'a-0001_1',
+            'terminal_id' => 'trm555',
             'original_receipt_id' => '',
             'total_tax' => 100,
             'total_fee' => 1000,
@@ -157,6 +159,51 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '99999',
+            'branch_id' => 'a-0001_1',
+            'terminal_id' => '1-1-557',
+            'original_receipt_id' => '0000001',
+            'total_tax' => '100',
+            'total_fee' => '1000',
+            'receipt_details' => [[
+                'no' => '1',
+                'item_name' => 'product-1',
+                'unit_price' => '200',
+                'quantity' => '1',
+                'tax' => '20',
+                'fee' => '200',
+                'item_1' => '',
+                'item_2' => '',
+                'item_3' => '',
+                'item_4' => '',
+                'item_5' => ''
+                ],
+                ['no' => '2',
+                'item_name' => 'product-2',
+                'unit_price' => '1234567',
+                'quantity' => '1',
+                'tax' => '12345',
+                'fee' => '1234567',
+                'item_1' => 'A',
+                'item_2' => 'B',
+                'item_3' => 'C',
+                'item_4' => 'D',
+                'item_5' => 'E'
+                ]]
+            ];
+        $response = $this->postjson(route('receipt.store'),$data);
+
+        $response->assertStatus(400)
+            ->assertJsonFragment([
+                'status' => 400,
+            ]);
+    }
+
+    public function testalphadash_branch_id()
+    {
+        //JSONデータ作成
+        $data = [
+            'company_id' => '99999',
+            'branch_id' => '$$$',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -200,6 +247,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '10z',
@@ -243,6 +291,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -286,6 +335,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -329,6 +379,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -372,6 +423,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -415,6 +467,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -458,6 +511,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',
@@ -501,6 +555,7 @@ class ReceiptControllerTest extends TestCase
         //JSONデータ作成
         $data = [
             'company_id' => '1',
+            'branch_id' => 'a-0001_1',
             'terminal_id' => '1-1-557',
             'original_receipt_id' => '0000001',
             'total_tax' => '100',

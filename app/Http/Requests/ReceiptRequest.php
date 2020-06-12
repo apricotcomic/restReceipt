@@ -28,6 +28,7 @@ class ReceiptRequest extends FormRequest
         return [
             //
             'company_id' => 'exists:company,id',        //comapnyテーブルのidに存在すること
+            'branch_id' => 'alpha_dash',            //アルファベット、数字、-、_
             'total_tax' => 'numeric',
             'total_fee' => 'numeric',
             'receipt_details.*.no' => ['numeric', 'distinct'],   //数字、かつ重複チェック
