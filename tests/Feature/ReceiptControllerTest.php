@@ -127,6 +127,75 @@ class ReceiptControllerTest extends TestCase
         $response = $this->get(route('receipt.show',$showdata));
 
         $response->assertStatus(200)
+        ->assertJsonFragment([
+            'status' => 0,
+            'receipt_id' => 1
+        ]);
+    }
+
+    public function testdestroy()
+    {
+        //データ仕込み
+        \App\Company::create([
+            'name' => 'Test corp'
+        ]);
+        $company = DB::table('company')
+                    ->select('id')
+                    ->orderBy('id','DESC')
+                    ->first();
+        $company_id = $company->id;
+        \App\Receipt::create([
+            'company_id' => $company_id,
+            'branch_id' => 'a-0001_1',
+            'terminal_id' => 'trm555',
+            'original_receipt_id' => '12345',
+            'total_tax' => 100,
+            'total_fee' => 1000,
+            'original_JSON_id' => 0
+        ]);
+        $receipt = DB::table('receipt')
+                    ->orderByRaw('id','DESC')
+                    ->first();
+        $receipt_id = $receipt->id;
+        \App\Receipt_detail::create([
+            'receipt_id' => $receipt_id,
+            'line_no' => 1,
+            'item_name' => 'product-1',
+            'unit_price' => 200,
+            'quantity' => 1,
+            'tax' => 20,
+            'fee' => 200,
+            'item_1' => '',
+            'item_2' => '',
+            'item_3' => '',
+            'item_4' => '',
+            'item_5' => ''
+        ]);
+        \App\Receipt_detail::create([
+            'receipt_id' => $receipt_id,
+            'line_no' => 2,
+            'item_name' => 'product-2',
+            'unit_price' => 1234567,
+            'quantity' => 1,
+            'tax' => 12345,
+            'fee' => 1234567,
+            'item_1' => 'A',
+            'item_2' => 'B',
+            'item_3' => 'C',
+            'item_4' => 'D',
+            'item_5' => 'E'
+        ]);
+        // inputデータ
+        $showdata = [
+            'company_id' => $company_id,
+            'branch_id' => 'a-0001_1',
+            'terminal_id' => 'trm555',
+            'original_receipt_id' => '12345'
+        ];
+        //　テスト
+        $response = $this->get(route('receipt.destroy',$showdata));
+
+        $response->assertStatus(200)
             ->assertExactJson([
                 'status' => 0,
                 'receipt_id' => $receipt_id,
@@ -160,7 +229,6 @@ class ReceiptControllerTest extends TestCase
                 ]
             ]);
     }
-
     public function testexists_company_id()
     {
         //JSONデータ作成

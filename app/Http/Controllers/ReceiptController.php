@@ -172,11 +172,48 @@ class ReceiptController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $receipt = receipt::where('company_id', '=', $request->input('company_id'))
+            ->where('branch_id', '=', $request->input('branch_id'))
+            ->where('terminal_id', '=', $request->input('terminal_id'))
+            ->where('original_receipt_id', '=', $request->input('original_receipt_id'))
+            ->first();
+
+        if (empty($receipt)) {
+            $receipt_json = [
+                'status' => 500,
+                'company_id' => $request->input('company_id'),
+                'branch_id' => $request->input('branch_id'),
+                'terminal_id' => $request->input('terminal_id'),
+                'original_receipt_id' => $request->input('original_receipt_id')
+            ];
+
+            Log::info('GET ERROR company_id:'.$request->input('company_id').
+                    ' branch_id:'.$request->input('branch_id').
+                    ' terminal_id:'.$request->input('terminal_id').
+                    ' original_receipt_id:'.$request->input('orijinal_receipt_id'));
+
+            return response()->json($receipt_json);
+        }
+
+        $receipt_detail = receipt_detail::where('receipt_id', '=', $receipt->receipt_id)
+            ->get();
+
+        $receipt_detail->delete();
+
+        $receipt->delete();
+
+        Log::info('Delete receipt_id:'.$receipt->receipt_id);
+
+        return response()->json([
+            'status' => 0,
+            'receipt_id' => $receipt->receipt_id
+        ],200);
+
     }
 }

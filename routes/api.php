@@ -21,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('receipt', 'ReceiptController@store')->name('receipt.store');
 
 Route::get('receipt', 'ReceiptController@show')->name('receipt.show');
+
+Route::delete('receipt', 'ReceiptController@destroy')->name('receipt.destroy');
