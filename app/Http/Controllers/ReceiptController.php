@@ -111,6 +111,23 @@ class ReceiptController extends Controller
             ->where('terminal_id', '=', $request->input('terminal_id'))
             ->where('original_receipt_id', '=', $request->input('original_receipt_id'))
             ->first();
+
+        if (empty($receipt)) {
+            $receipt_json = [
+                'status' => 500,
+                'company_id' => $request->input('company_id'),
+                'branch_id' => $request->input('branch_id'),
+                'terminal_id' => $request->input('terminal_id'),
+                'original_receipt_id' => $request->input('original_receipt_id')
+            ];
+
+            Log::info('GET ERROR company_id:'.$request->input('company_id').
+                    ' branch_id:'.$request->input('branch_id').
+                    ' terminal_id:'.$request->input('terminal_id').
+                    ' original_receipt_id:'.$request->input('orijinal_receipt_id'));
+
+            return response()->json($receipt_json);
+        }
         $company = company::findOrFail($receipt->company_id);
         $receipt_json = [
             'status' => null,
