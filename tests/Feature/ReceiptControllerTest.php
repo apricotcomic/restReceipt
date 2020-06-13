@@ -79,7 +79,7 @@ class ReceiptControllerTest extends TestCase
             'company_id' => $company_id,
             'branch_id' => 'a-0001_1',
             'terminal_id' => 'trm555',
-            'original_receipt_id' => '',
+            'original_receipt_id' => '12345',
             'total_tax' => 100,
             'total_fee' => 1000,
             'original_JSON_id' => 0
@@ -116,8 +116,15 @@ class ReceiptControllerTest extends TestCase
             'item_4' => 'D',
             'item_5' => 'E'
         ]);
+        // inputデータ
+        $showdata = [
+            'company_id' => $company_id,
+            'branch_id' => 'a-0001_1',
+            'terminal_id' => 'trm555',
+            'original_receipt_id' => '12345'
+        ];
         //　テスト
-        $response = $this->get(route('receipt.show',['receipt' => $receipt_id]));
+        $response = $this->get(route('receipt.show',$showdata));
 
         $response->assertStatus(200)
             ->assertExactJson([

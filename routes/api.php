@@ -18,4 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('receipt', 'ReceiptController');
+Route::post('receipt', 'ReceiptController@store')->name('receipt.store');
+
+Route::get('receipt', 'ReceiptController@show')->name('receipt.show');

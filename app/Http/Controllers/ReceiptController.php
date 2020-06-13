@@ -35,7 +35,7 @@ class ReceiptController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\ReceiptRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(ReceiptRequest $request)
@@ -100,13 +100,17 @@ class ReceiptController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(request $request)
     {
         //
-        $receipt = receipt::findOrFail($id);
+        $receipt = receipt::where('company_id', '=', $request->input('company_id'))
+            ->where('branch_id', '=', $request->input('branch_id'))
+            ->where('terminal_id', '=', $request->input('terminal_id'))
+            ->where('original_receipt_id', '=', $request->input('original_receipt_id'))
+            ->first();
         $company = company::findOrFail($receipt->company_id);
         $receipt_json = [
             'status' => null,
@@ -118,7 +122,7 @@ class ReceiptController extends Controller
         ];
 
         $detail_count = 0;
-        $receipt_detail = receipt_detail::whereReceipt_id($id)->get();
+        $receipt_detail = receipt_detail::where($receipt->receipt_id)->get();
         $receipt_details_json = null;
         foreach ($receipt_detail as $key => $value) {
             $receipt_json['receipt_details'][$key] = [
@@ -148,7 +152,7 @@ class ReceiptController extends Controller
     /**
      * Show the form for editing the specified resource.0
      *
-     * @param  int  $id
+     * @param  request $reqest
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
