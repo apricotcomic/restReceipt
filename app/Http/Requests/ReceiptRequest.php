@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Log;
 
 class ReceiptRequest extends FormRequest
 {
@@ -41,6 +42,8 @@ class ReceiptRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        Log::info('validate ERROR:'.$validator->errors());
+
         $res = response()->json([
             'status' => 400,
             'errors' => $validator->errors(),

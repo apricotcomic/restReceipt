@@ -9,7 +9,7 @@ class original_json extends Model
     //
     protected $table = 'original_json';
 
-    protected $fillabe = [
+    protected $fillable = [
         'id',
         'JSON_data',
         'receipt_id'

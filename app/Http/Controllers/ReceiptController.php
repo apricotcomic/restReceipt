@@ -34,7 +34,7 @@ class ReceiptController extends Controller
         $receipt->total_fee = $request->input('total_fee');
         $receipt->original_JSON_id = 0;
         $receipt->save();
-        $receipt_id = $receipt->count();
+        $receipt_id = $receipt->id;
 
         //insert receipt_detail
         foreach ($json["receipt_details"] as $key => $value) {
@@ -59,13 +59,14 @@ class ReceiptController extends Controller
         $original_json->JSON_data = $content;
         $original_json->receipt_id = $receipt_id;
         $original_json->save();
+        $orginal_json_id = $original_json->id;
 
         $receipt = receipt::find($receipt_id)
             ->update([
-                'original_JSON_id' => $original_json->count()
+                'original_JSON_id' => $orginal_json_id
             ]);
 
-        Log::info('post receipt id:'.$receipt_id.
+        Log::info('POST receipt id:'.$receipt_id.
                     ' company id:'.$request->input('company_id').
                     ' branch id:'.$request->input('branch_id').
                     ' terminal id:'.$request->input('terminal_id'));
@@ -152,21 +153,99 @@ class ReceiptController extends Controller
      * @param  request $reqest
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function update(request $request)
     {
-        //
-    }
+        //JSON decode
+        $content = $request->getContent();
+        $json = json_decode($content, true);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
         //
+        $receipt = receipt::where('company_id', '=', $request->input('company_id'))
+            ->where('branch_id', '=', $request->input('branch_id'))
+            ->where('terminal_id', '=', $request->input('terminal_id'))
+            ->where('original_receipt_id', '=', $request->input('original_receipt_id'))
+            ->first();
+
+        if (empty($receipt)) {
+            $receipt_json = [
+                'status' => 500,
+                'company_id' => $request->input('company_id'),
+                'branch_id' => $request->input('branch_id'),
+                'terminal_id' => $request->input('terminal_id'),
+                'original_receipt_id' => $request->input('original_receipt_id')
+            ];
+
+            Log::info('EDIT ERROR company_id:'.$request->input('company_id').
+                    ' branch_id:'.$request->input('branch_id').
+                    ' terminal_id:'.$request->input('terminal_id').
+                    ' original_receipt_id:'.$request->input('orijinal_receipt_id'));
+
+            return response()->json($receipt_json);
+        }
+
+        $receipt_details = receipt_detail::where('receipt_id', '=', $receipt->id)
+            ->get();
+
+        // 旧明細の削除
+        foreach ($receipt_details as $receipt_detail) {
+            $receipt_detail->delete();
+        }
+
+        //insert receipt_detail
+        foreach ($json["receipt_details"] as $key => $value) {
+            receipt_detail::create([
+                'receipt_id' => $receipt->id,
+                'line_no' => $value["no"],
+                'item_name' => $value["item_name"],
+                'unit_price' => $value["unit_price"],
+                'quantity' => $value["quantity"],
+                'tax' => $value["tax"],
+                'fee' => $value["fee"],
+                'item_1' => $value["item_1"],
+                'item_2' => $value["item_2"],
+                'item_3' => $value["item_3"],
+                'item_4' => $value["item_4"],
+                'item_5' => $value["item_5"]
+            ]);
+        }
+
+        $receipt->company_id = $request->input('company_id');
+        $receipt->branch_id = $request->input('branch_id');
+        $receipt->terminal_id = $request->input('terminal_id');
+        $receipt->original_receipt_id = $request->input('original_receipt_id');
+        $receipt->total_tax = $request->input('total_tax');
+        $receipt->total_fee = $request->input('total_fee');
+        $receipt->original_JSON_id = 0;
+        $receipt->save();
+
+        //update original_JSON
+        $original_json = original_json::where('receipt_id', '=', $receipt->id)
+            ->first();
+
+        if (empty($original_json)) {
+            $receipt_json = [
+                'status' => 500,
+                'receipt_id' => $receipt->id
+            ];
+
+            Log::info('UPDATE ERROR receipt_id:'.$receipt->id);
+
+            return response()->json($receipt_json);
+        }
+
+        $original_json->JSON_data = $content;
+        $original_json->save();
+
+        Log::info('UPDATE receipt id:'.$receipt->id.
+                    ' company id:'.$request->input('company_id').
+                    ' branch id:'.$request->input('branch_id').
+                    ' terminal id:'.$request->input('terminal_id'));
+
+        return response()->json([
+            'status' => 0,
+            'receipt_id' => $receipt->id
+        ],200);
+
     }
 
     /**
@@ -193,7 +272,7 @@ class ReceiptController extends Controller
                 'original_receipt_id' => $request->input('original_receipt_id')
             ];
 
-            Log::info('GET ERROR company_id:'.$request->input('company_id').
+            Log::info('DESTORY ERROR company_id:'.$request->input('company_id').
                     ' branch_id:'.$request->input('branch_id').
                     ' terminal_id:'.$request->input('terminal_id').
                     ' original_receipt_id:'.$request->input('orijinal_receipt_id'));
@@ -201,18 +280,20 @@ class ReceiptController extends Controller
             return response()->json($receipt_json);
         }
 
-        $receipt_detail = receipt_detail::where('receipt_id', '=', $receipt->receipt_id)
+        $receipt_details = receipt_detail::where('receipt_id', '=', $receipt->id)
             ->get();
 
-        $receipt_detail->delete();
+        foreach ($receipt_details as $receipt_detail) {
+            $receipt_detail->delete();
+        }
 
         $receipt->delete();
 
-        Log::info('Delete receipt_id:'.$receipt->receipt_id);
+        Log::info('Delete receipt_id:'.$receipt->id);
 
         return response()->json([
             'status' => 0,
-            'receipt_id' => $receipt->receipt_id
+            'receipt_id' => $receipt->id
         ],200);
 
     }

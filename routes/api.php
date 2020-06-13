@@ -22,4 +22,6 @@ Route::post('receipt', 'ReceiptController@store')->name('receipt.store');
 
 Route::get('receipt', 'ReceiptController@show')->name('receipt.show');
 
+Route::put('receipt', 'ReceiptController@update')->name('receipt.update');
+
 Route::delete('receipt', 'ReceiptController@destroy')->name('receipt.destroy');
