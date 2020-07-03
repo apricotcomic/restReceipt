@@ -16,3 +16,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/design/menu', 'MenuController@menu')->name('menu');
+
+Route::resource('setting', 'SettingController');
+
+Route::get('/print/{id}', 'ReceiptPrintController@print')->name('print');
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
