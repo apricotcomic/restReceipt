@@ -13,6 +13,7 @@ class company extends Model
         'id',
         'name',
         'address',
+        'zip',
         'tel',
         'fax',
         'email',

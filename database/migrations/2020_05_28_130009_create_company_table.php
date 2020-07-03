@@ -17,6 +17,7 @@ class CreateCompanyTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('address')->nullable($value = true);
+            $table->string('zip')->nullable($value = true);
             $table->string('tel')->nullable($value = true);
             $table->string('fax')->nullable($value = true);
             $table->string('email')->nullable($value = true);
