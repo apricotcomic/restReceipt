@@ -17,8 +17,23 @@ class ReceiptPrintController extends Controller
         //
         $receipts = \App\Receipt::all();
 
+        return view('receiptinfo.index',compact('receipts'));
+
     }
 
+/**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+        $receipt = \App\Receipt::find($id);
+        $details = \App\receipt_detail::wherereceipt_id($id)->get;
+        return view('receiptinfo.show', compact('receipt','details'));
+    }
 
     public function print($id)
     {

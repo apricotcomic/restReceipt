@@ -21,12 +21,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/design/menu', 'MenuController@menu')->name('menu');
-
-Route::resource('setting', 'SettingController');
+Route::get('/receiptinfo/menu', 'MenuController@menu')->name('menu');
 
 Route::get('/print/{id}', 'ReceiptPrintController@print')->name('print');
-
+Route::get('/print', 'ReceiptPrintController@index')->name('receiptinfo.index');
+Route::post('/print/{id}', 'ReceiptPrintController@show')->name('receiptinfo.show');
 
 Auth::routes();
 

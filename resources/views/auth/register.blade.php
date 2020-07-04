@@ -40,6 +40,20 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="company_zip" class="col-md-4 col-form-label text-md-right">{{ __('Company Zip') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="company_zip" type="text" class="form-control @error('company_zip') is-invalid @enderror" name="company_zip" value="{{ old('company_zip') }}" required autocomplete="company_zip" autofocus>
+
+                                @error('company_zip')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="company_tel" class="col-md-4 col-form-label text-md-right">{{ __('Company Tel') }}</label>
 
                             <div class="col-md-6">
