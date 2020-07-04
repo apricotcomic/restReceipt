@@ -26,7 +26,7 @@ h1 {
     {{ $company->name }}
 </div>
 <div class="total">
-    金 {{ $receipt->total_fee }} 円
+    金 {{ number_format($receipt->total_fee) }} 円
 </div>
 <div class="totalcomment">
     上記正に領収しました
@@ -44,9 +44,9 @@ h1 {
             @foreach ($details as $detail)
                 <tr>
                     <td>{{$detail->item_name}}</td>
-                    <td>{{$detail->quantity}}</td>
-                    <td>{{$detail->unit_price}}</td>
-                    <td>{{$detail->fee}}</td>
+                    <td align="right">{{number_format($detail->quantity)}}</td>
+                    <td align="right">{{number_format($detail->unit_price)}}</td>
+                    <td align="right">{{number_format($detail->fee)}}</td>
                 </tr>
             @endforeach
         @endif

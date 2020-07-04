@@ -56,12 +56,12 @@
                                 @if(isset($details))
                                     @foreach ($details as $detail)
                                         <tr>
-                                            <td>{{ $detail->line_no }}</td>
+                                            <td align="right">{{ $detail->line_no }}</td>
                                             <td>{{ $detail->item_name }}</td>
-                                            <td>{{ $detail->unit_price }}</td>
-                                            <td>{{ $detail->quantity }}</td>
-                                            <td>{{ $detail->tax }}</td>
-                                            <td>{{ $detail->fee }}</td>
+                                            <td align="right">{{ number_format($detail->unit_price) }}</td>
+                                            <td align="right">{{ number_format($detail->quantity) }}</td>
+                                            <td align="right">{{ number_format($detail->tax) }}</td>
+                                            <td align="right">{{ number_format($detail->fee) }}</td>
                                         </tr>
                                     @endforeach
                                 @endif
