@@ -4,6 +4,8 @@ namespace App\Services;
 
 use TCPDF;
 use App\Company_infomation;
+use App\Receipt;
+use App\receipt_detail;
 
 class ReceiptPrintService
 {
@@ -12,11 +14,11 @@ class ReceiptPrintService
         $this->pdf = $pdf;
     }
 
-    public function printPDF(Company_infomation $company)
+    public function printPDF(Company_infomation $company, Receipt $receipt, $details)
     {
         $this->pdf->AddPage();
         $this->pdf->SetFont("kozgopromedium", "", 10);
-        $this->pdf->writeHTML(view("form.sampleReceipt", compact('company')));
-        $this->pdf->Output('samurai.pdf', 'I');
+        $this->pdf->writeHTML(view("form.sampleReceipt", compact('company','receipt','details')));
+        $this->pdf->Output('receipt.pdf', 'I');
     }
 }

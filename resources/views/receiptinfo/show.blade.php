@@ -31,24 +31,37 @@
                         </div>
                     @endif
 
+                    <button type="button" class="btn btn-primary" onclick="location.href='{{ route('print',$receipt->id) }}'">
+                        {{ __('印刷') }}
+                    </button>
                     <button type="button" class="btn btn-primary" onclick="location.href='{{ route('menu') }}'">
                         {{ __('戻る') }}
                     </button>
 
                     <div class="table-resopnsive">
+                        Company Id:{{ $receipt->comapny_id }}<br>
+                        Total Fee:{{ $receipt->total_fee}}
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>{{__('ID')}}</th>
-                                    <th>{{__('company_id')}}</th>
+                                    <th>{{__('No')}}</th>
+                                    <th>{{__('Name')}}</th>
+                                    <th>{{__('Unit Price')}}</th>
+                                    <th>{{__('Quantity')}}</th>
+                                    <th>{{__('Tax')}}</th>
+                                    <th>{{__('Fee')}}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(isset($receipts))
-                                    @foreach ($receipts as $receipt)
+                                @if(isset($details))
+                                    @foreach ($details as $detail)
                                         <tr>
-                                            <td><a href="{{ route('receiptinfo.show', $receipt->id) }}">{{ $receipt->id }}</a></td>
-                                            <td>{{ $receipt->company_id }}</td>
+                                            <td>{{ $detail->line_no }}</td>
+                                            <td>{{ $detail->item_name }}</td>
+                                            <td>{{ $detail->unit_price }}</td>
+                                            <td>{{ $detail->quantity }}</td>
+                                            <td>{{ $detail->tax }}</td>
+                                            <td>{{ $detail->fee }}</td>
                                         </tr>
                                     @endforeach
                                 @endif

@@ -24,8 +24,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/receiptinfo/menu', 'MenuController@menu')->name('menu');
 
 Route::get('/print/{id}', 'ReceiptPrintController@print')->name('print');
-Route::get('/print', 'ReceiptPrintController@index')->name('receiptinfo.index');
-Route::post('/print/{id}', 'ReceiptPrintController@show')->name('receiptinfo.show');
+Route::get('/receiptinfo', 'ReceiptPrintController@index')->name('receiptinfo.index');
+Route::get('/receiptinfo/{id}', 'ReceiptPrintController@show')->name('receiptinfo.show');
 
 Auth::routes();
 

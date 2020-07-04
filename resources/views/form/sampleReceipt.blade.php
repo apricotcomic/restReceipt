@@ -26,7 +26,7 @@ h1 {
     {{ $company->name }}
 </div>
 <div class="total">
-    金 999,999,999 円
+    金 {{ $receipt->total_fee }} 円
 </div>
 <div class="totalcomment">
     上記正に領収しました
@@ -39,23 +39,17 @@ h1 {
         <th>単価</th>
         <th>金額</th>
     </tr>
-    <tr>
-        <td>商品１</td>
-        <td>1</td>
-        <td>100</td>
-        <td>100</td>
-    </tr>
-    <tr>
-        <td>商品２</td>
-        <td>4</td>
-        <td>200</td>
-        <td>800</td>
-    </tr>
-    <tr>
-        <td>商品３</td>
-        <td>3</td>
-        <td>150</td>
-        <td>450</td>
-    </tr>
+    <tbody>
+        @if(isset($details))
+            @foreach ($details as $detail)
+                <tr>
+                    <td>{{$detail->item_name}}</td>
+                    <td>{{$detail->quantity}}</td>
+                    <td>{{$detail->unit_price}}</td>
+                    <td>{{$detail->fee}}</td>
+                </tr>
+            @endforeach
+        @endif
+    </tbody>
 </table>
 

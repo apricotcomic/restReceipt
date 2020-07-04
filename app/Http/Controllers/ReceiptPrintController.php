@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use ReceiptPrint;
 
 class ReceiptPrintController extends Controller
@@ -31,15 +32,18 @@ class ReceiptPrintController extends Controller
     {
         //
         $receipt = \App\Receipt::find($id);
-        $details = \App\receipt_detail::wherereceipt_id($id)->get;
+        $details = \App\receipt_detail::wherereceipt_id($id)->get();
         return view('receiptinfo.show', compact('receipt','details'));
     }
 
     public function print($id)
     {
-        $company = \App\Company_infomation::whereCompany_id($id)->first();
+        $company_id = Auth::user()->company_id;
+        $company = \App\Company_infomation::whereCompany_id($company_id)->first();
+        $receipt = \App\Receipt::find($id);
+        $details = \App\receipt_detail::wherereceipt_id($id)->get();
 
-        ReceiptPrint::printPDF($company);
+        ReceiptPrint::printPDF($company,$receipt,$details);
 
     }
 }
