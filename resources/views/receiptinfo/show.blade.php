@@ -39,7 +39,7 @@
                     </button>
 
                     <div class="table-resopnsive">
-                        Company Id:{{ $receipt->comapny_id }}<br>
+                        Company Id:{{ $receipt->company_id }}<br>
                         Total Fee:{{ $receipt->total_fee}}
                         <table class="table table-striped">
                             <thead>

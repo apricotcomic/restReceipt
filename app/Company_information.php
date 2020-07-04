@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Company_infomation extends Model
+class Company_information extends Model
 {
     //
-    protected $table = 'company_infomation';
+    protected $table = 'company_information';
 
     protected $connection = 'mysql_receiptDesign';
 

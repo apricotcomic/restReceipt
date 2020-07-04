@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Company;
-use App\Company_infomation;
+use App\Company_information;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -70,13 +70,15 @@ class RegisterController extends Controller
         $company = Company::create([
                 'name' => $data['company_name'],
                 'address' => $data['company_address'],
+                'zip' => $data['company_zip'],
                 'tel' => $data['company_tel'],
                 'fax' => $data['company_fax'],
             ]);
 
-        Company_infomation::create([
+        Company_information::create([
             'name' => $data['company_name'],
             'address' => $data['company_address'],
+            'zip' => $data['company_zip'],
             'tel' => $data['company_tel'],
             'fax' => $data['company_fax'],
             'company_id' => $company->id,

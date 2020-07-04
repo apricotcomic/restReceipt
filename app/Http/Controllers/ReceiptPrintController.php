@@ -39,7 +39,7 @@ class ReceiptPrintController extends Controller
     public function print($id)
     {
         $company_id = Auth::user()->company_id;
-        $company = \App\Company_infomation::whereCompany_id($company_id)->first();
+        $company = \App\Company_information::whereCompany_id($company_id)->first();
         $receipt = \App\Receipt::find($id);
         $details = \App\receipt_detail::wherereceipt_id($id)->get();
 
