@@ -47,7 +47,7 @@
                                 @if(isset($receipts))
                                     @foreach ($receipts as $receipt)
                                         <tr>
-                                            <td><a href="{{ route('receiptinfo.show', $receiept->id) }}">{{ $receipt->id }}</a></td>
+                                            <td><a href="{{ route('receiptinfo.show', $receipt->id) }}">{{ $receipt->id }}</a></td>
                                             <td>{{ $receipt->company_id }}</td>
                                         </tr>
                                     @endforeach
