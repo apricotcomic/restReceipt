@@ -41,6 +41,9 @@
                                 <tr>
                                     <th>{{__('ID')}}</th>
                                     <th>{{__('company_id')}}</th>
+                                    <th>{{__('branch_id')}}</th>
+                                    <th>{{__('terminal_id')}}</th>
+                                    <th>{{__('original_receipt_id')}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +52,9 @@
                                         <tr>
                                             <td><a href="{{ route('receiptinfo.show', $receipt->id) }}">{{ $receipt->id }}</a></td>
                                             <td>{{ $receipt->company_id }}</td>
+                                            <td>{{ $receipt->branch_id }}</td>
+                                            <td>{{ $receipt->terminal_id }}</td>
+                                            <td>{{ $receipt->original_receipt_id }}</td>
                                         </tr>
                                     @endforeach
                                 @endif

@@ -9,6 +9,7 @@ use App\original_json;
 use App\receipt;
 use App\receipt_detail;
 use App\Http\Requests\ReceiptRequest;
+use DB;
 
 class ReceiptController extends Controller
 {
@@ -118,9 +119,8 @@ class ReceiptController extends Controller
             'total_fee' => $receipt->total_fee,
             'detail_count' => null
         ];
-
         $detail_count = 0;
-        $receipt_detail = receipt_detail::where($receipt->receipt_id)->get();
+        $receipt_detail = receipt_detail::where('receipt_id', $receipt->id)->get();
         $receipt_details_json = null;
         foreach ($receipt_detail as $key => $value) {
             $receipt_json['receipt_details'][$key] = [
