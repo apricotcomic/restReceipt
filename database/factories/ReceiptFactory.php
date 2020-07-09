@@ -14,7 +14,7 @@ $factory->define(receipt::class, function (Faker $faker) {
         'total_tax' => $faker->numberBetween($min = 1000,$max = 9999999),
         'total_fee' => $faker->numberBetween($min = 100,$max = 9999990),
         'original_JSON_id' => $faker->randomNumber(),
-        'created_at' => $faker->datetime($max = 'now',$timezone = date_default_timezone_get()),
-        'updated_at' => $faker->datetime($max = 'now',$timezone = date_default_timezone_get()),
+        'created_at' => $faker->datetimeThisMonth($max = 'now',$timezone = date_default_timezone_get()),
+        'updated_at' => $faker->datetimeThisMonth($max = 'now',$timezone = date_default_timezone_get()),
     ];
 });
