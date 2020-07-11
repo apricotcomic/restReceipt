@@ -17,6 +17,7 @@ class receipt extends Model
         'original_receipt_id',
         'total_tax',
         'total_fee',
-        'original_JSON_id'
+        'original_JSON_id',
+        'certify_date'
     ];
 }

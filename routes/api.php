@@ -25,3 +25,6 @@ Route::get('receipt', 'ReceiptController@show')->name('receipt.show');
 Route::put('receipt', 'ReceiptController@update')->name('receipt.update');
 
 Route::delete('receipt', 'ReceiptController@destroy')->name('receipt.destroy');
+
+Route::patch('receipt', 'ReceiptController@certify')->name('receipt.certify');
+

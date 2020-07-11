@@ -22,6 +22,7 @@ class CreateReceiptTable extends Migration
             $table->bigInteger('total_tax');
             $table->bigInteger('total_fee');
             $table->bigInteger('original_JSON_id');
+            $table->dateTime('certify_date')->nullable();
             $table->timestamps();
         });
     }

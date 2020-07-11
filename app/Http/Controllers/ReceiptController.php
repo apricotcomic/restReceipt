@@ -9,6 +9,7 @@ use App\original_json;
 use App\receipt;
 use App\receipt_detail;
 use App\Http\Requests\ReceiptRequest;
+use DateTime;
 use DB;
 
 class ReceiptController extends Controller
@@ -295,6 +296,53 @@ class ReceiptController extends Controller
             'status' => 0,
             'receipt_id' => $receipt->id
         ],200);
+
+    }
+
+    /**
+     * Certify the receipt.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function certify(request $request)
+    {
+        //
+        $receipt = receipt::where('company_id', '=', $request->input('company_id'))
+            ->where('branch_id', '=', $request->input('branch_id'))
+            ->where('terminal_id', '=', $request->input('terminal_id'))
+            ->where('original_receipt_id', '=', $request->input('original_receipt_id'))
+            ->first();
+
+        if (empty($receipt)) {
+            $receipt_json = [
+                'status' => 500,
+                'company_id' => $request->input('company_id'),
+                'branch_id' => $request->input('branch_id'),
+                'terminal_id' => $request->input('terminal_id'),
+                'original_receipt_id' => $request->input('original_receipt_id')
+            ];
+
+            Log::info('GET ERROR company_id:'.$request->input('company_id').
+                    ' branch_id:'.$request->input('branch_id').
+                    ' terminal_id:'.$request->input('terminal_id').
+                    ' original_receipt_id:'.$request->input('orijinal_receipt_id'));
+
+            return response()->json($receipt_json);
+        }
+
+        $receipt->certify_date = new DateTime();
+        $receipt->save();
+
+        $receipt_json = [
+            'status' => '200',
+            'receipt_id' => $receipt->id,
+            'certify_date' => $receipt->certify_date
+        ];
+
+        Log::info('UPDATE certify_date:'.$receipt->certify_date->format('Y/n/D G:i'));
+
+        return response()->json($receipt_json);
 
     }
 }
