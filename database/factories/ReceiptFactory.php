@@ -8,6 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(receipt::class, function (Faker $faker) {
     return [
         //
+        'purchase_date' => $faker->datetimeThisMonth($max = 'now',$timezone = date_default_timezone_get()),
         'branch_id' => $faker->word,
         'terminal_id' => $faker->randomNumber(),
         'original_receipt_id' => $faker->randomNumber(),

@@ -11,6 +11,7 @@ class receipt extends Model
 
     protected $fillable = [
         'id',
+        'purchase_date',
         'company_id',
         'branch_id',
         'terminal_id',
@@ -18,6 +19,11 @@ class receipt extends Model
         'total_tax',
         'total_fee',
         'original_JSON_id',
+        'certify_date'
+    ];
+
+    protected $dates = [
+        'purchase_date',
         'certify_date'
     ];
 }
