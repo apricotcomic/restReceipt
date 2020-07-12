@@ -32,7 +32,7 @@ h1 {
 <div class="address">
     〒{{ $company->zip }}　{{ $company->address }}<br>
     {{ $company->name }}<br>
-    <img src="/stamps/1/teststamp.png" width="50" height="50"/>
+    <img src="{{ asset('/stamps/1/teststamp.png') }}" width="50" height="50"/>
 </div>
 <div class="total">
     金 {{ number_format($receipt->total_fee) }} 円
