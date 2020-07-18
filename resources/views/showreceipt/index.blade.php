@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">Company Information</div>
+                <div class="card-header">レシート表示</div>
 
                 <div class="card-body">
 
@@ -35,13 +35,13 @@
                         <div class="form-group row">
                             <label for="id" class="col-md-2 col-form-label text-md-right">{{ __('Receipt ID') }}</label>
                             <div class="col-md-10 form-inline">
-                                <input id="company_id" class="input-group-text text-md-left col-md-2" type="text" name="company_id">
+                                <input id="company_id" class="input-group-text text-md-left col-md-2" type="text" name="company_id" value="{{ old('company_id') }}">
                                 <label class="col-md-1 col-form-label text-md-center">-</label>
-                                <input id="branch_id" class="input-group-text text-md-left col-md-2" type="text" name="branch_id">
+                                <input id="branch_id" class="input-group-text text-md-left col-md-2" type="text" name="branch_id" value="{{ old('branch_id') }}">
                                 <label class="col-md-1 col-form-label text-md-center">-</label>
-                                <input id="terminal_id" class="input-group-text text-md-left col-md-2" type="text" name="terminal_id">
+                                <input id="terminal_id" class="input-group-text text-md-left col-md-2" type="text" name="terminal_id" value="{{ old('terminal_id') }}">
                                 <label class="col-md-1 col-form-label text-md-center">-</label>
-                                <input id="original_receipt_id" class="input-group-text text-md-left col-md-2" type="text" name="original_receipt_id">
+                                <input id="original_receipt_id" class="input-group-text text-md-left col-md-2" type="text" name="original_receipt_id" value="{{ old('original_receipt_id') }}">
                             </div>
                         </div>
 
