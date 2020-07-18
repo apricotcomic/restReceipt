@@ -30,3 +30,9 @@ Route::get('/receiptinfo/{id}', 'ReceiptPrintController@show')->name('receiptinf
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/receipt', 'ShowReceiptController@index')->name('receiptindex');
+
+Route::post('/receipt/display', 'ShowReceiptController@display')->name('receiptdisplay');
+
+

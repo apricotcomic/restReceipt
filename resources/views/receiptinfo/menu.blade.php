@@ -4,6 +4,8 @@
 <div class="container">
 
     メニュー<br>
+    <a href="{{ route('receiptindex') }}">レシート表示</a><br>
+    <br>
     <a href="{{ route('receiptinfo.index') }}">請求書一覧</a><br>
     <a href="{{ route('print', $company_id) }}">請求書印刷<a>
     <br>
